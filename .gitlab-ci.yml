@@ -14,7 +14,10 @@ stages:
 job_compilacion:
   stage: build
   script:
-    - mvn clean package
+    - mvn clean package -DskipTests
+    - MAIN_CLASS=$(grep -rl "public static void main" src/main/java | head -n 1 | sed 's|.*src/main/java/||' | sed 's/\.java//' | tr '/' '.')
+    - echo "Main-Class: $MAIN_CLASS" > manifest.txt
+    - jar ufm target/*.jar manifest.txt
     - mv target/*.jar $PACKAGE_NAME
   artifacts:
     paths:
@@ -57,8 +60,8 @@ sync_to_github:
            -d "{\"name\": \"$CI_PROJECT_NAME\", \"private\": false}" \
            https://api.github.com/user/repos || true
     - git remote remove github || true
-    - git remote add github https://$GH_USER:$GH_TOKEN@github.com/$GH_USER/$CI_PROJECT_NAME.git
-    - git push github HEAD:refs/heads/$CI_COMMIT_REF_NAME --force --tags
+    - git remote add github https://${GH_USER}:${GH_TOKEN}@github.com/${GH_USER}/${CI_PROJECT_NAME}.git
+    - git push github HEAD:refs/heads/${CI_COMMIT_REF_NAME} --force --tags
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
     - if: $CI_COMMIT_BRANCH == "main"
