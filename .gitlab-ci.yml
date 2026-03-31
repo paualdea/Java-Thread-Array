@@ -14,11 +14,18 @@ stages:
 job_compilacion:
   stage: build
   script:
-    - mvn clean package -DskipTests
-    - MAIN_CLASS=$(grep -rl "public static void main" src/main/java | head -n 1 | sed 's|.*src/main/java/||' | sed 's/\.java//' | tr '/' '.')
-    - echo "Main-Class: $MAIN_CLASS" > manifest.txt
-    - jar ufm target/*.jar manifest.txt
-    - mv target/*.jar $PACKAGE_NAME
+    - |
+      mvn clean package -DskipTests
+      # 1. Buscamos la clase principal
+      MAIN_CLASS=$(grep -rl "public static void main" src/main/java | head -n 1 | sed 's|.*src/main/java/||' | sed 's/\.java//' | tr '/' '.')
+      echo "Clase principal detectada: $MAIN_CLASS"
+      
+      # 2. Creamos el manifiesto (ahora los ':' no darán error)
+      echo "Main-Class: $MAIN_CLASS" > manifest.txt
+      
+      # 3. Actualizamos el JAR e intercambiamos nombre
+      jar ufm target/*.jar manifest.txt
+      mv target/*.jar $PACKAGE_NAME
   artifacts:
     paths:
       - $PACKAGE_NAME
