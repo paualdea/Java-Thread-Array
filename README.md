@@ -22,3 +22,6 @@ El programa sigue el siguiente flujo:
 ## Instrucciones de Uso
 
 Para ejecutar este programa, se puede usar el fichero `.jar` o el código fuente desde las *releases* del proyecto.
+
+---
+Este proyecto sirve como evidencia del aprendizaje sobre el manejo de hilos en Java, de la asignatura **Programación de Servicios y Procesos**.
