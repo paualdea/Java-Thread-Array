@@ -31,7 +31,7 @@ public class Main {
         }
 
         // Imprimimos el array completo
-        System.out.println("\nArray completa:");
+        System.out.println("\nArray completo:");
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
                 // Imprimimos los valores recurrentemente
